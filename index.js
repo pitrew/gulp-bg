@@ -1,6 +1,7 @@
 "use strict";
 var spawn = require("child_process").spawn,
-    colors = require("chalk");
+    colors = require("chalk"),
+    gutil = require('gulp-util');
 
 var Child = function(cmd, args) {
   this.cmd = cmd;
@@ -19,7 +20,7 @@ var Child = function(cmd, args) {
 Child.prototype.start = function() {
   if (this.running) return;
   var sig = "["+colors.green("bg")+"]";
-  console.log(sig, "Starting", this.cmd, this.args.join(" "));
+  gutil.log(sig, "Starting", this.cmd, this.args.join(" "))
 
   this.proc = spawn(this.cmd, this.args, { stdio: 'inherit' });
 
@@ -47,7 +48,7 @@ Child.prototype.exit = function(code) {
   this.running = false;
   var msg = "Exited with code "+code;
   var sig = "["+colors[code === 0 ? "gray" : "red"]("bg")+"]";
-  console.log(sig, msg);
+  gutil.log(sig, msg);
 };
 
 var plugin = module.exports = function(cmd, args) {
